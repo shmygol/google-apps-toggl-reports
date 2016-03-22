@@ -2,9 +2,7 @@
 
 ## Install the dependences
 
-    ```
     npm install
-    ```
 
 ## Development
 
@@ -18,7 +16,6 @@ To get the initial setup working for you, perform the following steps.
 	script.google.com/a/macros/google.com/d/***DRIVE_FILE_ID***/edit
 4. Perform the following commands:
 
-    ```
     mkdir build
     cd build
     mkdir dev
@@ -26,15 +23,15 @@ To get the initial setup working for you, perform the following steps.
     gapps init *DRIVE_FILE_ID*
     cd ../..
     gulp upload-latest --env dev
-    ```
+
 5. Refresh your Apps Script project. You should now see a copy of some of the files from the local source location.
 
 ### To upload and test the code
 
-1.
-    ```
+1. Perform the following command to upload the changes:
+
     gulp upload-latest --env dev
-    ```
+
 2. Open the Apps Script project and make sure, that code is updated.
 3. Select 'Publish' > 'Test as add-on...'
 
