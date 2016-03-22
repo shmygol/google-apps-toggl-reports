@@ -19,6 +19,5 @@ function onOpen(e) {
 }
 
 function onTestButton() {
-
-  console.log('Test Button clicked', app.countSheets());
+  Logger.log('Test Button clicked', app.countSheets());
 }
