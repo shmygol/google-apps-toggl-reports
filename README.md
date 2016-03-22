@@ -2,11 +2,15 @@
 
 ## Install the dependences
 
+Perform the command:
+    ```
     npm install
+    ```
 
 ## Development
 
 ### Prepare
+
 To get the initial setup working for you, perform the following steps.
 
 1. Create a [new Google Spreadsheet](https://docs.google.com/spreadsheets/create), and copy the ID of the file. The file ID is found in the URL to the spreadsheet:
@@ -16,6 +20,7 @@ To get the initial setup working for you, perform the following steps.
 	script.google.com/a/macros/google.com/d/***DRIVE_FILE_ID***/edit
 4. Perform the following commands:
 
+    ```
     mkdir build
     cd build
     mkdir dev
@@ -23,6 +28,7 @@ To get the initial setup working for you, perform the following steps.
     gapps init *DRIVE_FILE_ID*
     cd ../..
     gulp upload-latest --env dev
+    ```
 
 5. Refresh your Apps Script project. You should now see a copy of some of the files from the local source location.
 
@@ -30,7 +36,9 @@ To get the initial setup working for you, perform the following steps.
 
 1. Perform the following command to upload the changes:
 
+    ```
     gulp upload-latest --env dev
+    ```
 
 2. Open the Apps Script project and make sure, that code is updated.
 3. Select 'Publish' > 'Test as add-on...'
