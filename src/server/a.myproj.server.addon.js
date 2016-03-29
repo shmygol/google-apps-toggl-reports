@@ -1,10 +1,12 @@
+var app = createApp_();
+app.registerMenuCallbacks(this);
 
 /**
  * Called when an add-on is installed.
  * @param {Object} e Apps Script onInstall event object
  */
 function onInstall(e) {
-  onOpen(e);
+  app.pluginOnInstall(e);
 }
 
 
@@ -13,11 +15,5 @@ function onInstall(e) {
  * @param {Object} e Apps Script onInstall event object
  */
 function onOpen(e) {
-  var addonMenu = SpreadsheetApp.getUi().createAddonMenu();
-  addonMenu.addItem('Test Button', 'onTestButton');
-  addonMenu.addToUi();
-}
-
-function onTestButton() {
-  Logger.log('Test Button clicked', app.countSheets());
+  app.pluginOnOpen(e);
 }
