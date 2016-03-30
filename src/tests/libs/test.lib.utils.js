@@ -1,14 +1,6 @@
-/*
- * Require test framework parts
- */
-
-var chai = require('chai'),
+var appRoot = require('app-root-path'),
+    chai = require('chai'),
     expect = chai.expect;
-
-/*
- * Include required files
- */
-
 
 /*
  * Tests
@@ -17,7 +9,7 @@ var utils = {};
 suite('lib.utils', function() {
 
   setup(function() {
-    utils = require('../../../src/libs/lib.utils.js');
+    utils = require(appRoot + '/src/libs/lib.utils.js');
   });
 
   suite('#getSpreadsheetUrl', function() {
