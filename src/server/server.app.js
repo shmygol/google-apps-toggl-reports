@@ -76,6 +76,6 @@ function require_server_app_() {
 }
 
 if (typeof module !== 'undefined') {
-    module.exports = require_server_app_();
+  module.exports = require_server_app_();
 }
 

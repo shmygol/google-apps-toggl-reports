@@ -19,13 +19,15 @@ function require_lib_app_() {
     if (typeof methodNameInScope === 'undefined') {
       methodNameInScope = methodName;
     }
-    if (this._globalScopeCallbacks.indexOf(methodNameInScope) < 0) {
-      // TODO NOW: make sure that there are no methods with the same name in the scope, otherwise throw an exception
-      var _this = this;
-      scope[methodNameInScope] = function() {
-        return _this[methodName].apply(_this, arguments);
-      };
+    if (this._globalScopeCallbacks.indexOf(methodNameInScope) > -1) {
+      throw new Error(
+        'Couldn\'t register a method in the scope: the scope already has a property with name ' + methodNameInScope
+      );
     }
+    var _this = this;
+    scope[methodNameInScope] = function() {
+      return _this[methodName].apply(_this, arguments);
+    };
   };
 
   GasApp.prototype.setConfigs = function(newConfigs) {
@@ -59,7 +61,11 @@ function require_lib_app_() {
     this._menuItems.forEach(function(element, index, array) {
       if (!element.isRegistered) {
         if (typeof element.globalFunctionName !== 'undefined') {
-          // TODO NOW: make sure that element has no globalFunctionName index, otherwise throw an exception
+          throw new TypeError(
+            'Menu element with index '
+            + index
+            + ' marked as not registered, but already has a property globalFunctionName'
+          );
         }
         var globalFunctionName = element.methodName + '_';
         this._registerMethodInGlobalScope(element.methodName, scope, globalFunctionName);
@@ -76,7 +82,11 @@ function require_lib_app_() {
     var addonMenu = SpreadsheetApp.getUi().createAddonMenu();
     this._menuItems.forEach(function(element, index, array) {
       if (typeof element.globalFunctionName === 'undefined') {
-        // TODO NOW: make sure that element has globalFunctionName index, otherwise throw an exception
+        throw new TypeError(
+          'Menu element with index '
+          + index
+          + ' marked as registered, but doesn\'t have a property globalFunctionName'
+        );
       } 
       addonMenu.addItem(element.caption, element.globalFunctionName);
     }.bind(this));
@@ -88,6 +98,6 @@ function require_lib_app_() {
 }
 
 if (typeof module !== 'undefined') {
-    module.exports = require_lib_app_();
+  module.exports = require_lib_app_();
 }
 

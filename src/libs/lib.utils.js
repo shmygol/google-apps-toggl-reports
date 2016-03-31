@@ -14,8 +14,11 @@ function require_lib_utils_() {
    * @return {String} Full URL to open the spreadsheet on Drive.
    */
   utils.getSpreadsheetUrl = function(fileId, gid) {
-    if (typeof fileId === 'undefined' || typeof gid === 'undefined') {
-      throw new TypeError('Both fileId and gid parameters must be defined');
+    if (typeof fileId === 'undefined') {
+      throw new TypeError('fileId parameter is undefined');
+    }
+    if (typeof gid === 'undefined') {
+      throw new TypeError('gid parameter is undefined');
     }
     return 'https://docs.google.com/spreadsheets/d/' + fileId +
         '/edit#gid=' + gid;
@@ -47,5 +50,5 @@ function require_lib_utils_() {
 }
 
 if (typeof module !== 'undefined') {
-    module.exports = require_lib_utils_();
+  module.exports = require_lib_utils_();
 }
