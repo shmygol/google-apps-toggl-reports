@@ -1,21 +1,6 @@
-/*
- * Require test framework parts
- */
-
-var chai = require('chai'),
+var appRoot = require('app-root-path'),
+    chai = require('chai'),
     expect = chai.expect;
-
-/*
- * Include required files
- */
-
-var fs = require('fs');
-includeFile = function(fileName) {
-  var content = fs.readFileSync(fileName).toString();
-  eval.apply(global, [content]);
-};
-includeFile('src/libs/lib.app.js');
-// includeFile('src/server/a.myproj.server.main.js');
 
 /*
  * Tests
@@ -24,7 +9,7 @@ var app = {};
 suite('GasApp', function() {
 
   setup(function() {
-    var GasApp = getLibGasApp_();
+    var GasApp = require(appRoot + '/src/libs/lib.app.js');
     app = new GasApp();
   });
 
@@ -103,7 +88,7 @@ suite('GasApp', function() {
       expect(app.getConfig('test03')).to.equal(15);
     });
 
-    test('should return undefined there is no configs by a given key', function() {
+    test('should return undefined if there is no configs by a given key', function() {
       app._configs = {test01: 5, test02: 10, test03: 15, test04: 20};
       expect(app.getConfig('test99')).to.equal(undefined);
     });
@@ -118,6 +103,30 @@ suite('GasApp', function() {
       app._configs = {};
       expect(app.getConfig('test01')).to.equal(undefined);
       expect(app.getConfig('test99')).to.equal(undefined);
+    });
+  });
+  suite('#registerMenuCallbacks', function() {
+    test('should create all required wrap functions in the given scope according _menuItems parameter', function() {
+      var fooScope = {existingScopeVar: 'foo'};
+      app._menuItems = [
+        {
+          'caption': 'Test Button',
+          'methodName': 'onTestButton',
+          'globalFunctionName': undefined,
+          'isRegistered': false,
+        },
+        {
+          'caption': 'Test Button2',
+          'methodName': 'onTestButtonTwo',
+          'globalFunctionName': undefined,
+          'isRegistered': false,
+        },
+      ];
+      app.registerMenuCallbacks(fooScope);
+      expect(fooScope).to.have.property('onTestButton_');
+      expect(fooScope).to.have.property('onTestButtonTwo_');
+      expect(fooScope.onTestButton_).to.be.a('function');
+      expect(fooScope.onTestButtonTwo_).to.be.a('function');
     });
   });
 })

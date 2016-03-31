@@ -1,9 +1,9 @@
 
 /**
- * Wrap App class to a function, because all script files will be merged together in GAS
+ * Wrapper to emulate require
  * @return {Object}
  */
-function getLibGasApp_() {
+function require_lib_app_() {
   /**
    * @constructor
    */
@@ -58,7 +58,9 @@ function getLibGasApp_() {
   GasApp.prototype.registerMenuCallbacks = function(scope) {
     this._menuItems.forEach(function(element, index, array) {
       if (!element.isRegistered) {
-        // TODO NOW: make sure that element has no globalFunctionName index, otherwise throw an exception
+        if (typeof element.globalFunctionName !== 'undefined') {
+          // TODO NOW: make sure that element has no globalFunctionName index, otherwise throw an exception
+        }
         var globalFunctionName = element.methodName + '_';
         this._registerMethodInGlobalScope(element.methodName, scope, globalFunctionName);
         element.globalFunctionName = globalFunctionName;
@@ -73,7 +75,9 @@ function getLibGasApp_() {
   GasApp.prototype.createMenu = function() {
     var addonMenu = SpreadsheetApp.getUi().createAddonMenu();
     this._menuItems.forEach(function(element, index, array) {
-      // TODO NOW: make sure that element has globalFunctionName index, otherwise throw an exception
+      if (typeof element.globalFunctionName === 'undefined') {
+        // TODO NOW: make sure that element has globalFunctionName index, otherwise throw an exception
+      } 
       addonMenu.addItem(element.caption, element.globalFunctionName);
     }.bind(this));
     addonMenu.addToUi();
@@ -82,3 +86,8 @@ function getLibGasApp_() {
 
   return GasApp;
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = require_lib_app_();
+}
+

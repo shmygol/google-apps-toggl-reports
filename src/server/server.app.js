@@ -1,10 +1,10 @@
 
 /**
- * Wrap creating of the app object with specific methods to a function, because all scripts will be merged together in GAS
+ * Wrapper to emulate require
  * @return {Object}
  */
-function createApp_() {
-  var GasApp = getLibGasApp_();
+function require_server_app_() {
+  var GasApp = require_lib_app_();
   var app = new GasApp();
 
   app._menuItems = [
@@ -74,3 +74,8 @@ function createApp_() {
 
   return app;
 }
+
+if (typeof module !== 'undefined') {
+    module.exports = require_server_app_();
+}
+

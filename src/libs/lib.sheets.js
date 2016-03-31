@@ -1,4 +1,8 @@
 
+/**
+ * Wrapper to emulate require
+ * @return {Object}
+ */
 function require_lib_sheets_() {
   /**
    * Assists in working in a standalone project that may be dynamically bound to

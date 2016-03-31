@@ -1,4 +1,8 @@
 
+/**
+ * Wrapper to emulate require
+ * @return {Object}
+ */
 function require_lib_utils_() {
   var utils = {};
 
