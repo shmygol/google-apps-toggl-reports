@@ -33,33 +33,15 @@ gulp.task('upload-latest', ['copy-latest'], shell.task(['gapps upload'],
 gulp.task('copy-latest', ['clean-deployment'], function() {
   copyEnvironmentSpecific();
   copyServerCode();
-  copyClientCode();
 });
 
 // Copies all .js that will be run by the Apps Script runtime
 function copyServerCode() {
-  return gulp.src([
-    srcRoot + '/server/*.js',
-    srcRoot + '/libs/*.js',
-    srcRoot + '/ui/*.server.js'])
+  ['server', 'libs'].forEach(function(dir, index, array) {
+    gulp.src([srcRoot + '/' + dir + '/*.js'])
+      .pipe(rename({prefix: dir + '.'}))
       .pipe(gulp.dest(dstRoot));
-}
-
-// Appends ".html" to any css, and any js that will be included in client code
-// Then copies those .html files to the upload staging folder.
-function copyClientCode() {
-  return gulp.src([
-    srcRoot + '/ui/*.html',
-    srcRoot + '/ui/*.css',
-    srcRoot + '/ui/*.client.js'])
-      .pipe(
-      rename(function(path) {
-        if (path.extname !== '.html') {
-          path.extname = path.extname + '.html';
-        }
-        return path;
-      }))
-      .pipe(gulp.dest(dstRoot));
+  });
 }
 
 // Does any environment specific work.
