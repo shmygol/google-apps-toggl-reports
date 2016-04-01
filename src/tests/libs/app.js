@@ -168,5 +168,5 @@ suite('GasApp', function() {
       expect(app.registerMenuCallbacks.bind(app, fooScope)).to.throw(Error);
     });
   });
-})
+});
 

@@ -22,7 +22,7 @@ function ask_libs_helpers_() {
     }
     return 'https://docs.google.com/spreadsheets/d/' + fileId +
         '/edit#gid=' + gid;
-  }
+  };
 
   /**
    * Logs an Apps Script exception, including the call stack

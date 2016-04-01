@@ -61,9 +61,9 @@ function ask_libs_app_() {
       if (!element.isRegistered) {
         if (typeof element.globalFunctionName !== 'undefined') {
           throw new TypeError(
-            'Menu element with index '
-            + index
-            + ' marked as not registered, but already has a property globalFunctionName'
+            'Menu element with index ' +
+            index +
+            ' marked as not registered, but already has a property globalFunctionName'
           );
         }
         var globalFunctionName = element.methodName + '_';
@@ -82,9 +82,9 @@ function ask_libs_app_() {
     this._menuItems.forEach(function(element, index, array) {
       if (typeof element.globalFunctionName === 'undefined') {
         throw new TypeError(
-          'Menu element with index '
-          + index
-          + ' marked as registered, but doesn\'t have a property globalFunctionName'
+          'Menu element with index ' +
+          index +
+          ' marked as registered, but doesn\'t have a property globalFunctionName'
         );
       } 
       addonMenu.addItem(element.caption, element.globalFunctionName);

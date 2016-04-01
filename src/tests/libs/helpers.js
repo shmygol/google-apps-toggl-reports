@@ -28,5 +28,5 @@ suite('lib.helpers', function() {
     });
   });
 
-})
+});
 

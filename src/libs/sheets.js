@@ -14,7 +14,7 @@ function ask_libs_sheets_() {
    */
   var SheetsUtilitiesLibrary = function(config) {
     this.config = config;
-  }
+  };
 
 
   /**
