@@ -1,9 +1,9 @@
 
 /**
- * Wrapper to emulate require
+ * Wrapper for libs/ask
  * @return {Object}
  */
-function require_lib_app_() {
+function ask_libs_app_() {
   /**
    * @constructor
    */
@@ -98,6 +98,6 @@ function require_lib_app_() {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = require_lib_app_();
+  module.exports = ask_libs_app_();
 }
 

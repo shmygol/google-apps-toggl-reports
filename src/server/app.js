@@ -1,10 +1,10 @@
 
 /**
- * Wrapper to emulate require
+ * Wrapper for libs/ask
  * @return {Object}
  */
-function require_server_app_() {
-  var GasApp = require_lib_app_();
+function ask_server_app_() {
+  var GasApp = ask_libs_app_();
   var app = new GasApp();
 
   app._menuItems = [
@@ -76,6 +76,6 @@ function require_server_app_() {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = require_server_app_();
+  module.exports = ask_server_app_();
 }
 

@@ -1,9 +1,9 @@
 
 /**
- * Wrapper to emulate require
+ * Wrapper for libs/ask
  * @return {Object}
  */
-function require_lib_utils_() {
+function ask_libs_helpers_() {
   var utils = {};
 
   /**
@@ -50,5 +50,5 @@ function require_lib_utils_() {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = require_lib_utils_();
+  module.exports = ask_libs_helpers_();
 }

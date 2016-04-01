@@ -9,7 +9,7 @@ var app = {};
 suite('GasApp', function() {
 
   setup(function() {
-    var GasApp = require(appRoot + '/src/libs/lib.app.js');
+    var GasApp = require(appRoot + '/src/libs/app.js');
     app = new GasApp();
   });
 
@@ -106,7 +106,7 @@ suite('GasApp', function() {
     });
   });
   suite('#registerMenuCallbacks', function() {
-    test('should create all required wrap functions in the given scope according _menuItems parameter', function() {
+    test('should create all required proxy functions in the given scope according _menuItems parameter', function() {
       var fooScope = {existingScopeVar: 'foo'};
       app._menuItems = [
         {

@@ -1,9 +1,9 @@
 
 /**
- * Wrapper to emulate require
+ * Wrapper for libs/ask
  * @return {Object}
  */
-function require_lib_sheets_() {
+function ask_libs_sheets_() {
   /**
    * Assists in working in a standalone project that may be dynamically bound to
    * a Spreadsheet (as an add-on), but also may run separate (testing, Execution
@@ -135,6 +135,6 @@ function require_lib_sheets_() {
 }
 
 if (typeof module !== 'undefined') {
-    module.exports = require_lib_sheets_();
+    module.exports = ask_libs_sheets_();
 }
 
