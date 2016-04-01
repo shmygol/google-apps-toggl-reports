@@ -16,7 +16,7 @@ function ask_server_app_() {
     },
     {
       'caption': 'Test Button2',
-      'methodName': 'onTestButton',
+      'methodName': 'onTestButtonToo',
       'globalFunctionName': undefined,
       'isRegistered': false,
     },
@@ -39,7 +39,11 @@ function ask_server_app_() {
   };
 
   app.onTestButton = function() {
-    Logger.log('Test Button clicked', app.countSheets());
+    Logger.log('Test Button. Sheets count: ', app.countSheets());
+  };
+
+  app.onTestButtonToo = function() {
+    Logger.log('Another test Button clicked');
   };
 
   /**
@@ -47,9 +51,10 @@ function ask_server_app_() {
    * @return {Integer}
    */
   app.countSheets = function() {
-    var config = this.getConfigs();
-    var currentSpreadsheet = new SheetsUtilitiesLibrary(config)
-      .getCurrentActiveSpreadsheet();
+    var config = this.getConfigs(),
+        SheetsUtilities = ask_libs_sheets_(),
+        sheetsUtilities = new SheetsUtilities(config),
+        currentSpreadsheet = sheetsUtilities.getCurrentActiveSpreadsheet();
     var count = currentSpreadsheet.getSheets().length;
     if (config.debug) {
       Logger.log(

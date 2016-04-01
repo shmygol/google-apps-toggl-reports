@@ -1,4 +1,4 @@
-var app = ask_libs_app_();
+var app = ask_server_app_();
 app.registerMenuCallbacks(this);
 
 /**
