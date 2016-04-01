@@ -8,7 +8,6 @@ function ask_libs_app_() {
    * @constructor
    */
   var GasApp = function() {
-    this._globalScopeCallbacks = [];
   };
 
   /**
@@ -19,7 +18,7 @@ function ask_libs_app_() {
     if (typeof methodNameInScope === 'undefined') {
       methodNameInScope = methodName;
     }
-    if (this._globalScopeCallbacks.indexOf(methodNameInScope) > -1) {
+    if (typeof scope[methodNameInScope] !== 'undefined') {
       throw new Error(
         'Couldn\'t register a method in the scope: the scope already has a property with name ' + methodNameInScope
       );
