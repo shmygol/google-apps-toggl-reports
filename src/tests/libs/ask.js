@@ -40,7 +40,7 @@ suite('ask_', function() {
     test('should try to include a module if a generated function not found', function() {
       var customRequireFunction = function(moduleName) {
         return 'result from custom require function for module ' + moduleName;
-      }
+      };
       var originalRequire = ask_.__get__('require');
 
       ask_.__set__('require', function(moduleName) {
@@ -79,5 +79,5 @@ suite('ask_', function() {
 
   });
 
-})
+});
 
