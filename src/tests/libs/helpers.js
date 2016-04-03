@@ -1,4 +1,5 @@
 var appRoot = require('app-root-path'),
+    ask = require(appRoot + '/src/libs/ask.js'),
     chai = require('chai'),
     expect = chai.expect;
 
@@ -9,7 +10,7 @@ var helpers = {};
 suite('lib.helpers', function() {
 
   setup(function() {
-    helpers = require(appRoot + '/src/libs/helpers.js');
+    helpers = ask('libs/helpers', appRoot + '/src/');
   });
 
   suite('#getSpreadsheetUrl', function() {

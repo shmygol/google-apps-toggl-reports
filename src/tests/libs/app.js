@@ -1,4 +1,5 @@
 var appRoot = require('app-root-path'),
+    ask = require(appRoot + '/src/libs/ask.js'),
     chai = require('chai'),
     expect = chai.expect;
 
@@ -9,7 +10,7 @@ var app = {};
 suite('GasApp', function() {
 
   setup(function() {
-    var GasApp = require(appRoot + '/src/libs/app.js');
+    var GasApp = ask('libs/app', appRoot + '/src/');
     app = new GasApp();
   });
 
