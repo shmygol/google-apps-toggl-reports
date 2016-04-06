@@ -33,7 +33,7 @@
     "url": "git@github.com:trilliput/google-apps-toggl-reports.git"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha --ui tdd --recursive ./src/tests"
+    "test": "node_modules/.bin/mocha --ui tdd --recursive ./tests"
   },
   "version": "0.0.1",
   "devDependencies": {

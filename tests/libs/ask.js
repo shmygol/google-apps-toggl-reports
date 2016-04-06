@@ -5,7 +5,7 @@ var appRoot = require('app-root-path'),
     chai = require('chai'),
     expect = chai.expect,
     rewire =  require('rewire'),
-    pathToAsk = appRoot + '/src/libs/ask.js';
+    pathToAsk = appRoot + '/libs/ask.js';
 
 /*
  * Prepare
@@ -25,7 +25,7 @@ suite('ask_', function() {
       if (moduleName == 'app-root-path') {
         return '/root';
       }
-      if (moduleName == 'relative/path/to/missing/module' || moduleName == 'missing-module' || moduleName == '/root/src/missing-module') {
+      if (moduleName == 'relative/path/to/missing/module' || moduleName == 'missing-module' || moduleName == '/root/missing-module') {
         throw new Error('Cannot find module \'' + moduleName+ '\'');
       }
       return 'result from standart require function for module "' + moduleName + '"';
@@ -57,12 +57,12 @@ suite('ask_', function() {
       expect(ask_('module-name')).
         to.equal('result from standart require function for module "module-name"');
       expect(ask_('relative/path/to/missing/module')).
-        to.equal('result from standart require function for module "/root/src/relative/path/to/missing/module"');
+        to.equal('result from standart require function for module "/root/relative/path/to/missing/module"');
 
       expect(ask_('libs/mmm', customRequireFunction)).
         to.equal('result from custom require function for module "libs/mmm"');
       expect(ask_('relative/path/to/missing/module', customRequireFunction)).
-        to.equal('result from custom require function for module "/root/src/relative/path/to/missing/module"');
+        to.equal('result from custom require function for module "/root/relative/path/to/missing/module"');
     });
 
     test('should throw an exception if generated function not found and no other require function provided', function() {
@@ -74,7 +74,7 @@ suite('ask_', function() {
 
     test('should throw an exception if neithere generated function nor module found', function() {
       expect(ask_.bind(ask_, 'missing-module')).
-        to.throw(Error, 'Can include neither "missing-module" nor "/root/src/missing-module" modules. Errors: \nCannot find module \'missing-module\'\nCannot find module \'/root/src/missing-module\'');
+        to.throw(Error, 'Can include neither "missing-module" nor "/root/missing-module" modules. Errors: \nCannot find module \'missing-module\'\nCannot find module \'/root/missing-module\'');
     });
 
     test('should throw an exception if the module name starts with "." or "/"', function() {

@@ -1,5 +1,5 @@
 var appRoot = require('app-root-path'),
-    ask = require(appRoot + '/src/libs/ask.js'),
+    ask = require(appRoot + '/libs/ask.js'),
     chai = require('chai'),
     expect = chai.expect;
 

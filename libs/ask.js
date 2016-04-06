@@ -19,8 +19,8 @@ function ask_(moduleName, requireFunction) {
     return eval(functionNameToAsk + '()');
   }
   if (typeof requireFunction !== 'undefined') {
-    var appRoot = require('app-root-path') + '/src/',
-        modulePath = appRoot + moduleName,
+    var appRoot = require('app-root-path'),
+        modulePath = appRoot + '/' + moduleName,
         errors = [];
     try {
       return requireFunction(moduleName);

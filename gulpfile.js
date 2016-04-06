@@ -8,6 +8,11 @@ var rename = require('gulp-rename');
 var debug = require('gulp-debug');
 var del = require('del');
 
+var srcFolders = {
+  _all: ['server', 'libs'],
+  dev: []
+};
+
 // minimist structure and defaults for this task configuration
 var knownOptions = {
   string: ['env'],
@@ -17,8 +22,6 @@ var knownOptions = {
 };
 var options = minimist(process.argv.slice(2), knownOptions);
 
-// The root working directory where code is edited
-var srcRoot = 'src';
 // The root staging folder for gapps configurations
 var dstRoot = 'build/' + options.env + '/src';
 
@@ -37,8 +40,8 @@ gulp.task('copy-latest', ['clean-deployment'], function() {
 
 // Copies all .js that will be run by the Apps Script runtime
 function copyServerCode() {
-  ['server', 'libs'].forEach(function(dir, index, array) {
-    gulp.src([srcRoot + '/' + dir + '/*.js'])
+  srcFolders._all.forEach(function(dir, index, array) {
+    gulp.src([dir + '/*.js'])
       .pipe(rename({prefix: dir + '.'}))
       .pipe(gulp.dest(dstRoot));
   });
@@ -51,22 +54,25 @@ function copyEnvironmentSpecific() {
   // Do target environment specific work
   switch (options.env) {
     case 'dev':
-      gulp.src(srcRoot + '/**/*.js')
-          .pipe(jshint())
-          .pipe(jshint.reporter('jshint-stylish'));
+      for (var env in srcFolders) {
+        gulp.src(srcFolders[env])
+            .pipe(jshint())
+            .pipe(jshint.reporter('jshint-stylish'));
+      }
       break;
 
-    case 'tst':
-      //Copy test scripts, if target is "tst"
-      gulp.src(srcRoot + '/tests/*.js')
-          .pipe(gulp.dest(dstRoot));
-      break;
+    // TODO: uncomment when are functional tests implemethed
+    // case 'tst':
+    //   //Copy test scripts, if target is "tst"
+    //   gulp.src('tests/*.js')
+    //       .pipe(gulp.dest(dstRoot));
+    //   break;
 
     default:
       break;
   }
 
-  return gulp.src(srcRoot + '/environments/' + options.env + '/*.js')
+  return gulp.src('environments/' + options.env + '/*.js')
       .pipe(gulp.dest(dstRoot));
 }
 
@@ -86,7 +92,7 @@ gulp.task('clean-deployments', function(cb) {
 });
 
 gulp.task('lint', function() {
-  return gulp.src(srcRoot + '/**/*.js')
+  return gulp.src('**/*.js')
       .pipe(jshint())
       .pipe(jshint.reporter('jshint-stylish'));
 });
