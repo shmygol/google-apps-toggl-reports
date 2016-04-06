@@ -10,7 +10,7 @@ var helpers = {};
 suite('lib.helpers', function() {
 
   setup(function() {
-    helpers = ask('libs/helpers', appRoot + '/src/');
+    helpers = ask('libs/helpers');
   });
 
   suite('#getSpreadsheetUrl', function() {

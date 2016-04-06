@@ -10,7 +10,7 @@ var app = {};
 suite('GasApp', function() {
 
   setup(function() {
-    var GasApp = ask('libs/app', appRoot + '/src/');
+    var GasApp = ask('libs/app');
     app = new GasApp();
   });
 
