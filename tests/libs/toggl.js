@@ -1,16 +1,20 @@
 var appRoot = require('app-root-path'),
     ask = require(appRoot + '/libs/ask.js'),
     chai = require('chai'),
-    expect = chai.expect;
+    expect = chai.expect,
+    sinon = require('sinon');
 
 /*
  * Tests
  */
-var togglApi = {};
+var togglApi, UrlFetchAppMock;
 suite('libs/toggl', function() {
 
   setup(function() {
-    var TogglApi = ask('libs/toggl')
+    var TogglApi = ask('libs/toggl'),
+        UrlFetchAppMock = sinon.mock();
+
+    global.UrlFetchApp = UrlFetchAppMock;
     togglApi = new TogglApi();
   });
 
