@@ -7,7 +7,7 @@ var appRoot = require('app-root-path'),
  * Tests
  */
 var helpers = {};
-suite('lib.helpers', function() {
+suite('libs/helpers', function() {
 
   setup(function() {
     helpers = ask('libs/helpers');

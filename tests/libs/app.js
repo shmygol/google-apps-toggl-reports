@@ -7,7 +7,7 @@ var appRoot = require('app-root-path'),
  * Tests
  */
 var app = {};
-suite('GasApp', function() {
+suite('libs/app', function() {
 
   setup(function() {
     var GasApp = ask('libs/app');
