@@ -264,7 +264,7 @@ suite('libs/toggl', function() {
       var expectedFetchArg2 = urlFetchAppSecondArgument,
           expectedFetchArg1 =
             'https://www.toggl.com/reports/api/v2/summary.json?user_agent=trilliput&workspace_id=96143&' +
-            'since=2016-03-30&until=2016-04-05';
+            'since=2016-03-30&until=2016-04-05&';
 
       global.UrlFetchApp = {
         fetch: function(arg1, arg2) {
@@ -282,17 +282,16 @@ suite('libs/toggl', function() {
         }
       };
 
-      var actualResult = togglApi.summary('2016-03-03', 'week');
+      var actualResult = togglApi.summary('2016-03-30', 'week');
 
       expect(actualResult).to.deep.equal({data: ['foo0', 'foo1']});
     });
 
     test('should call UrlFetchAppMock.fetch() with until argument as a date parameter, if until is "month"', function() {
-      // TODO: test with 2016-03-31
       var expectedFetchArg2 = urlFetchAppSecondArgument,
           expectedFetchArg1 =
             'https://www.toggl.com/reports/api/v2/summary.json?user_agent=trilliput&workspace_id=96143&' +
-            'since=2016-03-30&until=2016-04-30';
+            'since=2016-03-30&until=2016-04-29&';
 
       global.UrlFetchApp = {
         fetch: function(arg1, arg2) {
@@ -310,17 +309,44 @@ suite('libs/toggl', function() {
         }
       };
 
-      var actualResult = togglApi.summary('2016-03-03', 'month');
+      var actualResult = togglApi.summary('2016-03-30', 'month');
+
+      expect(actualResult).to.deep.equal({data: ['foo0', 'foo1']});
+    });
+
+    test('should call UrlFetchAppMock.fetch() with until argument as a date parameter, if until is "month" and since is 2016-03-31', function() {
+      // TODO: test with 2016-03-31
+      var expectedFetchArg2 = urlFetchAppSecondArgument,
+          expectedFetchArg1 =
+            'https://www.toggl.com/reports/api/v2/summary.json?user_agent=trilliput&workspace_id=96143&' +
+            'since=2016-03-31&until=2016-04-30&';
+
+      global.UrlFetchApp = {
+        fetch: function(arg1, arg2) {
+          expect(arg1).to.equal(expectedFetchArg1);
+          expect(arg2).to.deep.equal(urlFetchAppSecondArgument);
+
+          return responseMock = {
+            getResponseCode: function() {
+              return 202;
+            },
+            getContentText: function() {
+              return '{"data": ["foo0", "foo1"]}';
+            },
+          };
+        }
+      };
+
+      var actualResult = togglApi.summary('2016-03-31', 'month');
 
       expect(actualResult).to.deep.equal({data: ['foo0', 'foo1']});
     });
 
     test('should call UrlFetchAppMock.fetch() with until argument as a date parameter, if until is "year"', function() {
-      // TODO: test with 2016-03-31
       var expectedFetchArg2 = urlFetchAppSecondArgument,
           expectedFetchArg1 =
             'https://www.toggl.com/reports/api/v2/summary.json?user_agent=trilliput&workspace_id=96143&' +
-            'since=2016-03-30&until=2017-03-30';
+            'since=2016-03-30&until=2017-03-29&';
 
       global.UrlFetchApp = {
         fetch: function(arg1, arg2) {
@@ -338,13 +364,13 @@ suite('libs/toggl', function() {
         }
       };
 
-      var actualResult = togglApi.summary('2016-03-03', 'year');
+      var actualResult = togglApi.summary('2016-03-30', 'year');
 
       expect(actualResult).to.deep.equal({data: ['foo0', 'foo1']});
     });
 
     test('should throw an exception if until argument is not valid string', function() {
-      expect(togglApi.summary.bind(togglApi, '2016-03-03', 'soon')).to.throw(TypeError);
+      expect(togglApi.summary.bind(togglApi, '2016-03-03', 'soon')).to.throw(TypeError, 'Until date \'soon\' is invalid. Must be \'week\', \'month\', \'year\' or a valid ISO date format');
     });
 
     test('should throw an exception with the text from the response', function() {
