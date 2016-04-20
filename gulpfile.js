@@ -61,7 +61,7 @@ function copyEnvironmentSpecific() {
       }
       break;
 
-    // TODO: uncomment when are functional tests implemethed
+    // TODO: uncomment when functional tests are implemethed
     // case 'tst':
     //   //Copy test scripts, if target is "tst"
     //   gulp.src('tests/*.js')
@@ -73,6 +73,7 @@ function copyEnvironmentSpecific() {
   }
 
   return gulp.src('environments/' + options.env + '/*.js')
+      .pipe(rename({prefix: 'environments.'}))
       .pipe(gulp.dest(dstRoot));
 }
 
