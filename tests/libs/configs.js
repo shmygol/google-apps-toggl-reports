@@ -133,6 +133,21 @@ suite('libs/configs', function() {
 
       expect(configs.get('missing_key')).to.equal(undefined);
     });
+
+    test('should return cloned configs data, not a reference to the data object', function() {
+      var expectedAskArg1 = 'environments/configs';
+      global.ask_ = function(arg1) {
+        expect(arg1).to.equal(expectedAskArg1);
+        return {is_debug: true, toggl_token: '1234567890'};
+      };
+
+      var configs = new Configs();
+
+      var configsData = configs.get();
+      expect(configs.get()).to.deep.equal({is_debug: true, toggl_token: '1234567890'});
+      configsData['new_lokal_key'] = 'foo';
+      expect(configs.get()).to.deep.equal({is_debug: true, toggl_token: '1234567890'});
+    });
   });
 });
 
