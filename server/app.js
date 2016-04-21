@@ -4,23 +4,16 @@
  * @return {Object}
  */
 function ask_server_app_() {
-  var GasApp = ask_libs_app_();
-  var app = new GasApp();
+  /**
+   * Required libs
+   */
+  var GasApp = ask_('libs/app'),
+      SheetsUtilities = ask_('libs/sheets');
 
-  app._menuItems = [
-    {
-      'caption': 'Test Button',
-      'methodName': 'onTestButton',
-      'globalFunctionName': undefined,
-      'isRegistered': false,
-    },
-    {
-      'caption': 'Test Button2',
-      'methodName': 'onTestButtonToo',
-      'globalFunctionName': undefined,
-      'isRegistered': false,
-    },
-  ];
+  /**
+   * App instance
+   */
+  var app = new GasApp();
 
   /**
    * onInstall
@@ -51,12 +44,10 @@ function ask_server_app_() {
    * @return {Integer}
    */
   app.countSheets = function() {
-    var config = this.getConfigs(),
-        SheetsUtilities = ask_libs_sheets_(),
-        sheetsUtilities = new SheetsUtilities(config),
+    var sheetsUtilities = new SheetsUtilities(this.configs.get()),
         currentSpreadsheet = sheetsUtilities.getCurrentActiveSpreadsheet();
     var count = currentSpreadsheet.getSheets().length;
-    if (config.debug) {
+    if (this.configs.get('debug')) {
       Logger.log(
           Utilities.formatString('main::countSheets:\nThere %s %d sheet%s.',
             (count > 1) ? 'are' : 'is', count, (count > 1) ? 's' : ''));
@@ -65,18 +56,26 @@ function ask_server_app_() {
   };
 
   /**
-   * Set default configs and configs from the environment
+   * Set application's properties
    */
+  app._menuItems = [
+    {
+      'caption': 'Test Button',
+      'methodName': 'onTestButton',
+      'globalFunctionName': undefined,
+      'isRegistered': false,
+    },
+    {
+      'caption': 'Test Button2',
+      'methodName': 'onTestButtonToo',
+      'globalFunctionName': undefined,
+      'isRegistered': false,
+    },
+  ];
 
-  app.setConfigs({
-    debug: false,
-    debugSpreadsheetId: null,
-  });
-
-  if (typeof envVars !== 'undefined') {
-    app.addConfigs(envVars);
-  }
-
+  /**
+   * Return prepaired application instance
+   */
   return app;
 }
 

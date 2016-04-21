@@ -5,9 +5,15 @@
  */
 function ask_libs_app_() {
   /**
+   * Required libs
+   */
+  var Configs = ask_('libs/configs');
+
+  /**
    * @constructor
    */
   var GasApp = function() {
+    this.configs = new Configs();
   };
 
   /**
@@ -27,29 +33,6 @@ function ask_libs_app_() {
     scope[methodNameInScope] = function() {
       return _this[methodName].apply(_this, arguments);
     };
-  };
-
-  GasApp.prototype.setConfigs = function(newConfigs) {
-    this._configs = {};
-    this.addConfigs(newConfigs);
-  };
-
-  GasApp.prototype.addConfigs = function(newConfigs) {
-    this._configs = this._configs || {};
-    for (var attrname in newConfigs) {
-      this._configs[attrname] = newConfigs[attrname];
-    }
-  };
-
-  GasApp.prototype.getConfigs = function() {
-    this._configs = this._configs || {};
-    return this._configs;
-  };
-
-  GasApp.prototype.getConfig = function(key) {
-    var configs = this.getConfigs();
-
-    return configs[key];
   };
 
   /**
