@@ -3,26 +3,23 @@ var appRoot = require('app-root-path'),
     chai = require('chai'),
     expect = chai.expect;
 
+global.ask_ = function(arg1) {
+  if (arg1 == 'libs/configs') {
+    return Configs;
+  } else if (arg1 == 'environments/configs') {
+    return {};
+  } else {
+    throw new Error('Unexpected ask_ argument ' + arg1);
+  }
+};
+
 /*
  * Tests
  */
-var app = {};
+var app, Configs, GasApp;
 suite('libs/app', function() {
 
   setup(function() {
-    var GasApp, Configs;
-
-    global.ask_ = function(arg1) {
-      if (arg1 == 'libs/configs') {
-        return Configs;
-      } else if (arg1 == 'environments/configs') {
-        return {};
-      } else {
-        throw new Error('Unexpected ask_ argument ' + arg1);
-      }
-      return {is_debug: true, toggl_token: '1234567890'};
-    };
-
     Configs = ask('libs/configs');
     GasApp = ask('libs/app');
 
