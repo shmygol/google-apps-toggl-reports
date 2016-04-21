@@ -26,6 +26,13 @@ suite('libs/app', function() {
     app = new GasApp();
   });
 
+  suite('#constructor', function() {
+    test('should instanciate libs/configs as configs property', function() {
+      expect(app).to.have.property('configs');
+      expect(app.configs).to.be.instanceof(Configs);
+    });
+  });
+
   suite('#registerMenuCallbacks', function() {
     test('should create all marked as not registered required proxy functions in the given scope according _menuItems parameter', function() {
       var fooScope = {existingScopeVar_: 'foo'};
