@@ -8,12 +8,27 @@ function ask_server_app_() {
    * Required libs
    */
   var GasApp = ask_('libs/app'),
-      SheetsUtilities = ask_('libs/sheets');
+      Toggl = ask_('libs/toggl'),
+      SheetsUtilities = ask_('libs/sheets'),
+      toggl;
 
   /**
    * App instance
    */
   var app = new GasApp();
+
+  app._getToggl = function() {
+    if (typeof toggl === 'undefined') {
+      toggl = new Toggl(
+        this.configs.get('toggl_api_key'),
+        {
+          user_agent: this.configs.get('toggl_user_agent'),
+          workspace_id: this.configs.get('toggl_workspace_id')
+        }
+      );
+    }
+    return toggl;
+  }
 
   /**
    * onInstall
@@ -31,10 +46,37 @@ function ask_server_app_() {
     this.createMenu();
   };
 
+  /**
+   * 
+   */
+  app.funcTogglReportDay = function(startDate) {
+    return this._getToggl().summary(startDate, startDate).time;
+  };
+
+  /**
+   * 
+   */
+  app.funcTogglReportWeek = function(startDate) {
+    return this._getToggl().summary(startDate, 'week').time;
+  };
+
+  /**
+   * 
+   */
+  app.funcTogglReportMonth = function(startDate) {
+    return this._getToggl().summary(startDate, 'month').time;
+  };
+
+  /**
+   * Menu item callback
+   */
   app.onTestButton = function() {
     Logger.log('Test Button. Sheets count: ', app.countSheets());
   };
 
+  /**
+   * Menu item callback
+   */
   app.onTestButtonToo = function() {
     Logger.log('Another test Button clicked');
   };
@@ -72,6 +114,7 @@ function ask_server_app_() {
       'isRegistered': false,
     },
   ];
+  app._toggl = new Toggl();
 
   /**
    * Return prepaired application instance

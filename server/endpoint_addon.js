@@ -1,4 +1,4 @@
-var app = ask_server_app_();
+var app = ask_('server/app');
 app.registerMenuCallbacks(this);
 
 /**
@@ -16,4 +16,16 @@ function onInstall(e) {
  */
 function onOpen(e) {
   app.pluginOnOpen(e);
+}
+
+function TOGGL_REPORT_DAY() {
+  return app.funcTogglReportDay.apply(app, arguments);
+}
+
+function TOGGL_REPORT_WEEK() {
+  return app.funcTogglReportWeek.apply(app, arguments);
+}
+
+function TOGGL_REPORT_MONTH() {
+  return app.funcTogglReportMonth.apply(app, arguments);
 }
