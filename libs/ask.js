@@ -1,5 +1,9 @@
 
 function ask_(moduleName, requireFunction) {
+  if (typeof requireFunction === 'undefined' && typeof require !== 'undefined') {
+    requireFunction = require;
+  }
+
   if (moduleName[0] === '.' || moduleName[0] === '/' ) {
     throw new TypeError(
       'moduleName parameter must not start with "/" or "."'
@@ -12,8 +16,6 @@ function ask_(moduleName, requireFunction) {
     ex.message = 'Function name to ask: "' + functionNameToAsk + '". Error: ' + ex.message;
     throw ex;
   }
-
-  requireFunction = requireFunction || require;
 
   if (isFunctionExist) {
     return eval(functionNameToAsk + '()');
