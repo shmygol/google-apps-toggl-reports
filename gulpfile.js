@@ -2,11 +2,16 @@
 
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
+var mocha = require('gulp-mocha');
 var shell = require('gulp-shell');
 var minimist = require('minimist');
 var rename = require('gulp-rename');
 var debug = require('gulp-debug');
 var del = require('del');
+
+/*
+ * Variables
+ */
 
 var srcFolders = {
   _all: ['server', 'libs'],
@@ -25,6 +30,10 @@ var options = minimist(process.argv.slice(2), knownOptions);
 // The root staging folder for gapps configurations
 var dstRoot = 'build/' + options.env + '/src';
 
+/*
+ * TASKS
+ */
+
 // Runs the copy-latest task, then calls gapps upload in the correct
 // configuration directory based on the target environment
 gulp.task('upload-latest', ['copy-latest'], shell.task(['gapps upload'],
@@ -33,51 +42,34 @@ gulp.task('upload-latest', ['copy-latest'], shell.task(['gapps upload'],
 // Copies all files based on the current target environment.
 // Completion of "clean-deployment" is a prerequisite for starting the copy
 // process.
-gulp.task('copy-latest', ['clean-deployment'], function() {
+gulp.task('copy-latest', ['lint', 'test'], function() {
+  // TODO: Implement as a synchronous dependency when this feature will be released with Gulp4
+  gulp.start('clean-deployment');
   copyEnvironmentSpecific();
   copyServerCode();
 });
 
-// Copies all .js that will be run by the Apps Script runtime
-function copyServerCode() {
+// Check code style of the js files in all source folders
+gulp.task('lint', function() {
+  var jsMasks = [];
   srcFolders._all.forEach(function(dir, index, array) {
-    gulp.src([dir + '/*.js'])
-      .pipe(rename({prefix: dir + '.'}))
-      .pipe(gulp.dest(dstRoot));
+    jsMasks.push(dir + '/*.js');
   });
-}
+  return gulp.src(jsMasks)
+      .pipe(jshint())
+      .pipe(jshint.reporter('jshint-stylish'));
+});
 
-// Does any environment specific work.
-// the "lint" step is also here, as that is only done on "dev"
-// targeted updates.
-function copyEnvironmentSpecific() {
-  // Do target environment specific work
-  switch (options.env) {
-    case 'dev':
-      for (var env in srcFolders) {
-        gulp.src(srcFolders[env])
-            .pipe(jshint())
-            .pipe(jshint.reporter('jshint-stylish'));
-      }
-      break;
+// Mocha test
+gulp.task('test', ['lint'], function() {
+  return gulp.src('tests/**/*.js', {read: false})
+      .pipe(mocha({ui: 'tdd'}));
+});
 
-    // TODO: uncomment when functional tests are implemethed
-    // case 'tst':
-    //   //Copy test scripts, if target is "tst"
-    //   gulp.src('tests/*.js')
-    //       .pipe(gulp.dest(dstRoot));
-    //   break;
+/*
+ * Utility tasks
+ */
 
-    default:
-      break;
-  }
-
-  return gulp.src('environments/' + options.env + '/*.js')
-      .pipe(rename({prefix: 'environments.'}))
-      .pipe(gulp.dest(dstRoot));
-}
-
-// Utility tasks
 gulp.task('clean-deployment', function(cb) {
   return del([
     dstRoot + '/*.*'
@@ -92,10 +84,39 @@ gulp.task('clean-deployments', function(cb) {
   ]);
 });
 
-gulp.task('lint', function() {
-  return gulp.src('**/*.js')
-      .pipe(jshint())
-      .pipe(jshint.reporter('jshint-stylish'));
-});
+/*
+ * Utility functions
+ */
 
+// Copies all .js that will be run by the Apps Script runtime
+function copyServerCode() {
+  srcFolders._all.forEach(function(dir, index, array) {
+    gulp.src([dir + '/*.js'])
+      .pipe(rename({prefix: dir + '.'}))
+      .pipe(gulp.dest(dstRoot));
+  });
+}
+
+// Does any environment specific work.
+function copyEnvironmentSpecific() {
+  // Do target environment specific work
+  switch (options.env) {
+    case 'dev':
+      break;
+
+    case 'tst':
+      // TODO: uncomment when functional tests are implemethed
+      // //Copy test scripts, if target is "tst"
+      // gulp.src('tests/*.js')
+      //     .pipe(gulp.dest(dstRoot));
+      break;
+
+    default:
+      break;
+  }
+
+  return gulp.src('environments/' + options.env + '/*.js')
+      .pipe(rename({prefix: 'environments.'}))
+      .pipe(gulp.dest(dstRoot));
+}
 
