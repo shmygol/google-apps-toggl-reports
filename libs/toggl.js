@@ -103,13 +103,17 @@ function ask_libs_toggl_() {
    * @throws {Error} if reguest was not successfull
    */
   TogglApi.prototype.summary = function(since, until, clientIds, projectIds, tagIds, parameters) {
-    parameters = parameters || {};
+    var parameters = parameters || {},
+        dateRegex = /\d{4}-[01]\d-[0-3]\d/;
+
     if (since) {
+      if (!dateRegex.test(since)) {
+        throw new TypeError('Since date \'' + since + '\' is invalid. Must be a valid ISO date string');
+      }
       parameters.since = since;
     }
     if (until) {
-      var allowedUntilStrings = ['week', 'month', 'year'],
-          dateRegex = /\d{4}-[01]\d-[0-3]\d/;
+      var allowedUntilStrings = ['week', 'month', 'year'];
       if (allowedUntilStrings.indexOf(until) > -1) {
         var sinceDate = new Date(parameters.since.split('-'));
         if (until == 'week') {
@@ -123,7 +127,7 @@ function ask_libs_toggl_() {
       } else if (dateRegex.test(until)) {
         parameters.until = until;
       } else {
-        throw new TypeError('Until date \'' + until + '\' is invalid. Must be \'week\', \'month\', \'year\' or a valid ISO date format');
+        throw new TypeError('Until date \'' + until + '\' is invalid. Must be \'week\', \'month\', \'year\' or a valid ISO date string');
       }
     }
     if (clientIds) {

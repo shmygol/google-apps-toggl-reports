@@ -369,8 +369,12 @@ suite('libs/toggl', function() {
       expect(actualResult).to.deep.equal({data: ['foo0', 'foo1']});
     });
 
+    test('should throw an exception if since argument is not valid string', function() {
+      expect(togglApi.summary.bind(togglApi, '03/01/2016', '2016-03-03')).to.throw(TypeError, 'Since date \'03/01/2016\' is invalid. Must be a valid ISO date string');
+    });
+
     test('should throw an exception if until argument is not valid string', function() {
-      expect(togglApi.summary.bind(togglApi, '2016-03-03', 'soon')).to.throw(TypeError, 'Until date \'soon\' is invalid. Must be \'week\', \'month\', \'year\' or a valid ISO date format');
+      expect(togglApi.summary.bind(togglApi, '2016-03-03', 'soon')).to.throw(TypeError, 'Until date \'soon\' is invalid. Must be \'week\', \'month\', \'year\' or a valid ISO date string');
     });
 
     test('should throw an exception with the text from the response', function() {
