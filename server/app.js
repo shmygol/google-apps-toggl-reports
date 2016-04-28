@@ -50,21 +50,21 @@ function ask_server_app_() {
    * 
    */
   app.funcTogglReportDay = function(startDate) {
-    return this._getToggl().summary(startDate, startDate).time;
+    return this._getToggl().summary(startDate, startDate).total_grand;
   };
 
   /**
    * 
    */
   app.funcTogglReportWeek = function(startDate) {
-    return this._getToggl().summary(startDate, 'week').time;
+    return this._getToggl().summary(startDate, 'week').total_grand;
   };
 
   /**
    * 
    */
   app.funcTogglReportMonth = function(startDate) {
-    return this._getToggl().summary(startDate, 'month').time;
+    return this._getToggl().summary(startDate, 'month').total_grand;
   };
 
   /**
