@@ -115,15 +115,21 @@ function ask_libs_toggl_() {
     if (until) {
       var allowedUntilStrings = ['week', 'month', 'year'];
       if (allowedUntilStrings.indexOf(until) > -1) {
-        var sinceDate = new Date(parameters.since.split('-'));
+        var sinceDateParts = parameters.since.split('-'),
+            untilYear = parseInt(sinceDateParts[0], 10),
+            untilMonth = parseInt(sinceDateParts[1], 10) - 1,
+            untilDay = parseInt(sinceDateParts[2], 10),
+            untilDate;
+
         if (until == 'week') {
-          sinceDate.setDate(sinceDate.getDate() + 7);
+          untilDay += 7;
         } else if (until == 'month') {
-          sinceDate.setMonth(sinceDate.getMonth() + 1);
+          untilMonth += 1;
         } else if (until == 'year') {
-          sinceDate.setFullYear(sinceDate.getFullYear() + 1);
+          untilYear += 1;
         }
-        parameters.until = sinceDate.toISOString().split('T')[0];
+        untilDate = new Date(untilYear, untilMonth, untilDay);
+        parameters.until = untilDate.toISOString().split('T')[0];
       } else if (dateRegex.test(until)) {
         parameters.until = until;
       } else {
