@@ -28,7 +28,7 @@ function ask_server_app_() {
       );
     }
     return toggl;
-  }
+  };
 
   /**
    * onInstall

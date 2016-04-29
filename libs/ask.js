@@ -9,9 +9,10 @@ function ask_(moduleName, requireFunction) {
       'moduleName parameter must not start with "/" or "."'
     );
   }
-  var functionNameToAsk = 'ask_' + moduleName.replace(/[-\/\.]/g, '_') + '_';
+  var functionNameToAsk = 'ask_' + moduleName.replace(/[-\/\.]/g, '_') + '_',
+      isFunctionExist = false;
   try {
-    var isFunctionExist = eval('typeof ' + functionNameToAsk) !== 'undefined';
+    isFunctionExist = eval('typeof ' + functionNameToAsk) !== 'undefined';
   } catch (ex) {
     ex.message = 'Function name to ask: "' + functionNameToAsk + '". Error: ' + ex.message;
     throw ex;

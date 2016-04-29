@@ -18,7 +18,7 @@ function ask_libs_toggl_() {
   };
 
   TogglApi.prototype._getApiUrl = function(type, queryParameters) {
-    var baseUrl = 'https://www.toggl.com/reports/api/v2/';
+    var baseUrl = 'https://www.toggl.com/reports/api/v2/',
         typePathes = {summary: 'summary.json'},
         queryString = '';
     if (!typePathes.hasOwnProperty(type)) {
@@ -26,7 +26,7 @@ function ask_libs_toggl_() {
     }
 
     queryString = '?';
-    for (key in queryParameters) {
+    for (var key in queryParameters) {
       queryString += key + '=' + encodeURIComponent(queryParameters[key]) + '&';
     }
 
@@ -62,9 +62,13 @@ function ask_libs_toggl_() {
    */
   TogglApi.prototype.request = function(type, parameters) {
     var allQueryParameters = {};
+
+    var key;
     for (key in this._standardParameters) {
       allQueryParameters[key] = this._standardParameters[key];
     }
+
+    key = undefined;
     for (key in parameters) {
       allQueryParameters[key] = parameters[key];
     }
@@ -103,8 +107,9 @@ function ask_libs_toggl_() {
    * @throws {Error} if reguest was not successfull
    */
   TogglApi.prototype.summary = function(since, until, clientIds, projectIds, tagIds, parameters) {
-    var parameters = parameters || {},
-        dateRegex = /\d{4}-[01]\d-[0-3]\d/;
+    parameters = parameters || {};
+
+    var dateRegex = /\d{4}-[01]\d-[0-3]\d/;
 
     if (since) {
       if (!dateRegex.test(since)) {

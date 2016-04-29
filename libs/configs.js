@@ -11,9 +11,9 @@ function ask_libs_configs_() {
    *                             overwritten by environment specific data 
    */
   var Configs = function(defaultData) {
-    var envData = ask_('environments/configs') || {},
-        defaultData = defaultData || {};
+    defaultData = defaultData || {};
     this._data = {};
+    var envData = ask_('environments/configs') || {};
 
     this._cloneData(defaultData, this._data);
     this._cloneData(envData, this._data);
@@ -33,7 +33,7 @@ function ask_libs_configs_() {
     if (typeof resultDataObject === 'undefined') {
       resultDataObject = {};
     }
-    for (key in dataToClone) {
+    for (var key in dataToClone) {
       resultDataObject[key] = dataToClone[key];
     }
     return resultDataObject;
