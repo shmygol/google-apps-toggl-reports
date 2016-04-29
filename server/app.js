@@ -47,72 +47,45 @@ function ask_server_app_() {
   };
 
   /**
-   * 
+   * TOGGL_REPORT
    */
-  app.funcTogglReportDay = function(startDate) {
-    return this._getToggl().summary(startDate, startDate).total_grand;
+  app.funcTogglReport = function(apiToken, workspaceId, since, until, clientIds, projectIds, tagIds) {
+    var toggl = this._getToggl(),
+        response;
+
+    toggl.setApiToken(apiToken);
+    response = this._getToggl().summary(
+      since, until, clientIds, projectIds, tagIds, 
+      {workspace_id: workspaceId}
+    );
+    return response.total_grand;
   };
 
   /**
-   * 
+   * TOGGL_REPORT_DAY
    */
-  app.funcTogglReportWeek = function(startDate) {
-    return this._getToggl().summary(startDate, 'week').total_grand;
+  app.funcTogglReportDay = function(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
+    return this.funcTogglReport(apiToken, workspaceId, since, since, clientIds, projectIds, tagIds);
   };
 
   /**
-   * 
+   * TOGGL_REPORT_WEEK
    */
-  app.funcTogglReportMonth = function(startDate) {
-    return this._getToggl().summary(startDate, 'month').total_grand;
+  app.funcTogglReportWeek = function(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
+    return this.funcTogglReport(apiToken, workspaceId, since, 'week', clientIds, projectIds, tagIds);
   };
 
   /**
-   * Menu item callback
+   * TOGGL_REPORT_MONTH
    */
-  app.onTestButton = function() {
-    Logger.log('Test Button. Sheets count: ', app.countSheets());
-  };
-
-  /**
-   * Menu item callback
-   */
-  app.onTestButtonToo = function() {
-    Logger.log('Another test Button clicked');
-  };
-
-  /**
-   * An example function that calculates the count of sheets
-   * @return {Integer}
-   */
-  app.countSheets = function() {
-    var sheetsUtilities = new SheetsUtilities(this.configs.get()),
-        currentSpreadsheet = sheetsUtilities.getCurrentActiveSpreadsheet();
-    var count = currentSpreadsheet.getSheets().length;
-    if (this.configs.get('debug')) {
-      Logger.log(
-          Utilities.formatString('main::countSheets:\nThere %s %d sheet%s.',
-            (count > 1) ? 'are' : 'is', count, (count > 1) ? 's' : ''));
-    }
-    return count;
+  app.funcTogglReportMonth = function(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
+    return this.funcTogglReport(apiToken, workspaceId, since, 'month', clientIds, projectIds, tagIds);
   };
 
   /**
    * Set application's properties
    */
   app._menuItems = [
-    {
-      'caption': 'Test Button',
-      'methodName': 'onTestButton',
-      'globalFunctionName': undefined,
-      'isRegistered': false,
-    },
-    {
-      'caption': 'Test Button2',
-      'methodName': 'onTestButtonToo',
-      'globalFunctionName': undefined,
-      'isRegistered': false,
-    },
   ];
   app._toggl = new Toggl();
 
