@@ -7,6 +7,7 @@ var shell = require('gulp-shell');
 var minimist = require('minimist');
 var rename = require('gulp-rename');
 var debug = require('gulp-debug');
+var concat = require('gulp-concat');
 var del = require('del');
 
 /*
@@ -28,8 +29,9 @@ var knownOptions = {
 var options = minimist(process.argv.slice(2), knownOptions);
 
 // The root staging folder for gapps configurations
-var dstRoot = 'build/' + options.env + '/src';
-
+var dstRoot = 'build/' + options.env + '/src',
+    dstConcatFile = 'build/' + options.env,
+    concatFileName = 'src.js';
 /*
  * TASKS
  */
@@ -39,14 +41,23 @@ var dstRoot = 'build/' + options.env + '/src';
 gulp.task('upload-latest', ['copy-latest'], shell.task(['gapps upload'],
     {cwd: 'build/' + options.env}));
 
+
+// Runs the copy-latest task, then concate all the code to one file
+gulp.task('copy-latest-to-file', ['copy-latest'], function() {
+  return gulp.src(dstRoot + '/*.js')
+    .pipe(concat(concatFileName))
+    .pipe(gulp.dest(dstConcatFile));
+});
+
 // Copies all files based on the current target environment.
 // Completion of "clean-deployment" is a prerequisite for starting the copy
 // process.
 gulp.task('copy-latest', ['lint', 'test'], function() {
   // TODO: Implement as a synchronous dependency when this feature will be released with Gulp4
-  gulp.start('clean-deployment');
-  copyEnvironmentSpecific();
+  gulp.run('clean-deployment');
+
   copyServerCode();
+  return copyEnvironmentSpecific();
 });
 
 // Check code style of the js files in all source folders
@@ -72,6 +83,7 @@ gulp.task('test', ['lint'], function() {
 
 gulp.task('clean-deployment', function(cb) {
   return del([
+    dstConcatFile + '/' + concatFileName,
     dstRoot + '/*.*'
   ]);
 });
@@ -89,6 +101,7 @@ gulp.task('clean-deployments', function(cb) {
  */
 
 // Copies all .js that will be run by the Apps Script runtime
+// TODO: Implement copyServerCode as a stand along task, which returns stream
 function copyServerCode() {
   srcFolders._all.forEach(function(dir, index, array) {
     gulp.src([dir + '/*.js'])
