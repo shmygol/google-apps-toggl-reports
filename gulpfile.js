@@ -8,6 +8,7 @@ var minimist = require('minimist');
 var rename = require('gulp-rename');
 var debug = require('gulp-debug');
 var concat = require('gulp-concat');
+var merge = require('merge-stream');
 var del = require('del');
 
 /*
@@ -56,8 +57,21 @@ gulp.task('copy-latest', ['lint', 'test'], function() {
   // TODO: Implement as a synchronous dependency when this feature will be released with Gulp4
   gulp.run('clean-deployment');
 
-  copyServerCode();
-  return copyEnvironmentSpecific();
+  var streams = merge();
+
+  streams.add(
+    gulp.src('environments/' + options.env + '/*.js')
+      .pipe(rename({prefix: 'environments.'}))
+      .pipe(gulp.dest(dstRoot)));
+
+  srcFolders._all.forEach(function(dir, index, array) {
+    streams.add(
+      gulp.src([dir + '/*.js'])
+        .pipe(rename({prefix: dir + '.'}))
+        .pipe(gulp.dest(dstRoot)));
+  });
+
+  return streams;
 });
 
 // Check code style of the js files in all source folders
@@ -91,45 +105,11 @@ gulp.task('clean-deployment', function(cb) {
 gulp.task('clean-deployments', function(cb) {
   return del([
     'build/dev/src/*.*',
+    'build/dev/' + concatFileName,
     'build/tst/src/*.*' ,
-    'build/prd/src/*.*'
+    'build/tst/' + concatFileName,
+    'build/prd/src/*.*',
+    'build/prd/' + concatFileName
   ]);
 });
-
-/*
- * Utility functions
- */
-
-// Copies all .js that will be run by the Apps Script runtime
-// TODO: Implement copyServerCode as a stand along task, which returns stream
-function copyServerCode() {
-  srcFolders._all.forEach(function(dir, index, array) {
-    gulp.src([dir + '/*.js'])
-      .pipe(rename({prefix: dir + '.'}))
-      .pipe(gulp.dest(dstRoot));
-  });
-}
-
-// Does any environment specific work.
-function copyEnvironmentSpecific() {
-  // Do target environment specific work
-  switch (options.env) {
-    case 'dev':
-      break;
-
-    case 'tst':
-      // TODO: uncomment when functional tests are implemethed
-      // //Copy test scripts, if target is "tst"
-      // gulp.src('tests/*.js')
-      //     .pipe(gulp.dest(dstRoot));
-      break;
-
-    default:
-      break;
-  }
-
-  return gulp.src('environments/' + options.env + '/*.js')
-      .pipe(rename({prefix: 'environments.'}))
-      .pipe(gulp.dest(dstRoot));
-}
 
