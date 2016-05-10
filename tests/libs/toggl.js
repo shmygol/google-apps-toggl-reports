@@ -26,9 +26,6 @@ suite('libs/toggl', function() {
             valueMap = {'token:api_token': '64coded_token'};
         return valueMap[stringArg1] || defaultResult; 
       },
-      jsonParse: function(jsonString) {
-        return JSON.parse(jsonString);
-      },
     };
 
     global.UrlFetchApp = undefined;

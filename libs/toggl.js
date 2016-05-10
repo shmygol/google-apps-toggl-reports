@@ -88,7 +88,7 @@ function ask_libs_toggl_() {
     return {
       text: response.getContentText(),
       code: response.getResponseCode(),
-      json: Utilities.jsonParse(response.getContentText()),
+      json: JSON.parse(response.getContentText()),
     };
   };
 
