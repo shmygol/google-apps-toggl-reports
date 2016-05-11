@@ -7,15 +7,15 @@ function ask_libs_configs_() {
   /**
    * @constructor
    * 
-   * @param {Object} defaultData Optional default configs data, wich can be
-   *                             overwritten by environment specific data 
+   * @param {Object} externalPropertiesContainer Optional container with method getProperty,
+   *                                             for example Google Properties Service
    */
-  var Configs = function(defaultData) {
-    defaultData = defaultData || {};
+  var Configs = function(externalPropertiesContainer) {
     this._data = {};
+    this._propertiesContainer = externalPropertiesContainer;
+
     var envData = ask_('environments/configs') || {};
 
-    this._cloneData(defaultData, this._data);
     this._cloneData(envData, this._data);
   };
 
@@ -51,9 +51,14 @@ function ask_libs_configs_() {
       this._data = {};
     }
     if (typeof key === 'undefined') {
-      return this._cloneData(this._data);
+     return this._cloneData(this._data);
     }
-    return this._data[key];
+    var envConfigValue = this._data[key],
+        propertyValue;
+    if (key[0] != '_' && typeof this._propertiesContainer !== 'undefined') {
+      propertyValue = this._propertiesContainer.getProperty(key);
+    }
+    return propertyValue || envConfigValue;
   };
 
   return Configs;
