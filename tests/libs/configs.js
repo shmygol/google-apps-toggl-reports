@@ -233,5 +233,75 @@ suite('libs/configs', function() {
       });
     });
   });
+
+  suite('#setProperty', function() {
+    test('should call setProperty of Google Properties Service object', function() {
+      var expectedAskArg1 = 'environments/configs';
+      global.ask_ = function(arg1) {
+        expect(arg1).to.equal(expectedAskArg1);
+        return {
+          _protected_key: '_protected_key in configs',
+          configs_key: 'configs_key in configs',
+          property_key: 'property_key in configs'
+        };
+      };
+
+      var propertiesMock = {
+        setProperty: function(key, value) {
+          expect(key).to.equal('new');
+          expect(value).to.equal('foo');
+          return {
+            _protected_key: '_protected_key in properties',
+            property_key: 'property_key in properties'
+          }[key] || null;
+        },
+      };
+
+      var configs = new Configs(propertiesMock);
+
+      configs.setProperty('new', 'foo');
+    });
+
+    test('should call setProperty of Google Properties Service object', function() {
+      var expectedAskArg1 = 'environments/configs';
+      global.ask_ = function(arg1) {
+        expect(arg1).to.equal(expectedAskArg1);
+        return {
+          _protected_key: '_protected_key in configs',
+          configs_key: 'configs_key in configs',
+          property_key: 'property_key in configs'
+        };
+      };
+
+      var configs = new Configs();
+
+      expect(configs.setProperty.bind(configs, 'new', 'foo')).to.throw(TypeError, 'Properties container must be defined in constructor, but isn\'t.');
+    });
+
+    test('should call setProperty of Google Properties Service object', function() {
+      var expectedAskArg1 = 'environments/configs';
+      global.ask_ = function(arg1) {
+        expect(arg1).to.equal(expectedAskArg1);
+        return {
+          _protected_key: '_protected_key in configs',
+          configs_key: 'configs_key in configs',
+          property_key: 'property_key in configs'
+        };
+      };
+
+      var propertiesMock = {
+        setProperty: function(key, value) {
+          return {
+            _protected_key: '_protected_key in properties',
+            property_key: 'property_key in properties'
+          }[key] || null;
+        },
+      };
+
+      var configs = new Configs(propertiesMock);
+
+      expect(configs.setProperty.bind(configs, '_protected_new', 'foo')).to.throw(TypeError, 'Cuoln\'t set protected property \'_protected_new\'');
+    });
+  });
 });
 

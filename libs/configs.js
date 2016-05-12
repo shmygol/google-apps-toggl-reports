@@ -78,6 +78,26 @@ function ask_libs_configs_() {
     return result;
   };
 
+  /**
+   * Sets a property value in the external property container by the given key
+   * 
+   * @param {string} key
+   * @param {string} value
+   * @return {undefined}
+   * 
+   * @throws {TypeError} if this._propertiesContainer is not defined
+   * @throws {TypeError} if property is protected (key starts with _)
+   */
+  Configs.prototype.setProperty = function(key, value) {
+    if (typeof this._propertiesContainer === 'undefined') {
+      throw new TypeError('Properties container must be defined in constructor, but isn\'t.');
+    }
+    if (key[0] == '_') {
+      throw new TypeError('Cuoln\'t set protected property \'' + key + '\'');
+    }
+    this._propertiesContainer.setProperty(key, value);
+  };
+
   return Configs;
 }
 
