@@ -16,7 +16,7 @@ function ask_libs_configs_() {
 
     var envData = ask_('environments/configs') || {};
 
-    this._cloneData(envData, this._data);
+    this._cloneData(envData, true, this._data);
   };
 
   /**
@@ -26,32 +26,34 @@ function ask_libs_configs_() {
    * which configs data is not supposed to be
    * 
    * @param {Object} dataToClone
+   * @param {bool} withProtected
    * @param {Object} resultDataObject Optional reference the cloned object
    * @return {Object} The cloned object
    */
-  Configs.prototype._cloneData = function(dataToClone, resultDataObject) {
+  Configs.prototype._cloneData = function(dataToClone, withProtected, resultDataObject) {
     if (typeof resultDataObject === 'undefined') {
       resultDataObject = {};
     }
     for (var key in dataToClone) {
-      resultDataObject[key] = dataToClone[key];
+      if (key[0] != '_' || withProtected) {
+        resultDataObject[key] = dataToClone[key];
+      }
     }
     return resultDataObject;
   };
 
   /**
-   * Returns config value by key or
-   * all the configs data as an object if no key provided
+   * Returns config value by key.
+   * If external properties container is provided and it has the requested property,
+   * a value from the container will be returned.
+   * Keys starting with '_' are treated as protected and will be not ovewritten by external property.
    * 
    * @param {string} key
-   * @return {Object|string|numger|bool} The cloned object
+   * @return {string|number|bool} The cloned object
    */
-  Configs.prototype.get = function(key) {
+  Configs.prototype.getProperty = function(key) {
     if (typeof this._data === 'undefined') {
       this._data = {};
-    }
-    if (typeof key === 'undefined') {
-     return this._cloneData(this._data);
     }
     var envConfigValue = this._data[key],
         propertyValue;
@@ -59,6 +61,21 @@ function ask_libs_configs_() {
       propertyValue = this._propertiesContainer.getProperty(key);
     }
     return propertyValue || envConfigValue;
+  };
+
+  /**
+   * Returns all the configs data as an object.
+   * Keys starting with _ are treated as protected and will be not ovewritten by external property.
+   * 
+   * @return {Object} The cloned object
+   */
+  Configs.prototype.getProperties = function() {
+    var result = {};
+    this._cloneData(this._data, true, result);
+    if (typeof this._propertiesContainer !== 'undefined') {
+      this._cloneData(this._propertiesContainer.getProperties(), false, result);
+    }
+    return result;
   };
 
   return Configs;
