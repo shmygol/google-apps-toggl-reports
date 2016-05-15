@@ -21,7 +21,6 @@ function onOpen(e) {
 /**
  * Toggl.com report for the given period
  *
- * @param {string} apiToken Toggl.com API token
  * @param {number} workspaceId Workspace id
  * @param {string} since Date in ISO format, e.g. 2016-04-29
  * @param {string} until Date in ISO format, e.g. 2016-05-28
@@ -31,14 +30,13 @@ function onOpen(e) {
  * @return {number} Total time in miliseconds
  * @customfunction
  */
-function TOGGL_REPORT(apiToken, workspaceId, since, until, clientIds, projectIds, tagIds) {
-  return app.funcTogglReport(apiToken, workspaceId, since, until, clientIds, projectIds, tagIds);
+function TOGGL_REPORT(workspaceId, since, until, clientIds, projectIds, tagIds) {
+  return app.funcTogglReport(workspaceId, since, until, clientIds, projectIds, tagIds);
 }
 
 /**
  * Toggl.com report for one day
  *
- * @param {string} apiToken Toggl.com API token
  * @param {number} workspaceId Workspace id
  * @param {string} since Date in ISO format, e.g. 2016-04-29
  * @param {string} clientIds Client ids separated by comma
@@ -47,14 +45,13 @@ function TOGGL_REPORT(apiToken, workspaceId, since, until, clientIds, projectIds
  * @return {number} Total time in miliseconds
  * @customfunction
  */
-function TOGGL_REPORT_DAY(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
-  return app.funcTogglReportDay(apiToken, workspaceId, since, clientIds, projectIds, tagIds);
+function TOGGL_REPORT_DAY(workspaceId, since, clientIds, projectIds, tagIds) {
+  return app.funcTogglReportDay(workspaceId, since, clientIds, projectIds, tagIds);
 }
 
 /**
  * Toggl.com report for one week
  *
- * @param {string} apiToken Toggl.com API token
  * @param {number} workspaceId Workspace id
  * @param {string} since Date in ISO format, e.g. 2016-04-29
  * @param {string} clientIds Client ids separated by comma
@@ -63,14 +60,13 @@ function TOGGL_REPORT_DAY(apiToken, workspaceId, since, clientIds, projectIds, t
  * @return {number} Total time in miliseconds
  * @customfunction
  */
-function TOGGL_REPORT_WEEK(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
-  return app.funcTogglReportWeek(apiToken, workspaceId, since, clientIds, projectIds, tagIds);
+function TOGGL_REPORT_WEEK(workspaceId, since, clientIds, projectIds, tagIds) {
+  return app.funcTogglReportWeek(workspaceId, since, clientIds, projectIds, tagIds);
 }
 
 /**
  * Toggl.com report for one month
  *
- * @param {string} apiToken Toggl.com API token
  * @param {number} workspaceId Workspace id
  * @param {string} since Date in ISO format, e.g. 2016-04-29
  * @param {string} clientIds Client ids separated by comma

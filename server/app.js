@@ -17,13 +17,24 @@ function ask_server_app_() {
    */
   var app = new GasApp();
 
+  /**
+   * Instantiate libs/toggl object
+   * and save as toggl variable in the closure if it's not defined
+   *
+   * @return {Objqct} libs/toggl object
+   * @throws {Error} if config or property toggl_api_key is not defined
+   */
   app._getToggl = function() {
     if (typeof toggl === 'undefined') {
+      var togglApiKey = this.configs.getProperty('toggl_api_key');
+      if (!togglApiKey) {
+        throw new Error('Required property toggl_api_key is not set');
+      }
       toggl = new Toggl(
-        this.configs.get('toggl_api_key'),
+        togglApiKey,
         {
-          user_agent: this.configs.get('toggl_user_agent'),
-          workspace_id: this.configs.get('toggl_workspace_id')
+          user_agent: this.configs.getProperty('toggl_user_agent'),
+          workspace_id: this.configs.getProperty('toggl_workspace_id')
         }
       );
     }
@@ -49,12 +60,11 @@ function ask_server_app_() {
   /**
    * TOGGL_REPORT
    */
-  app.funcTogglReport = function(apiToken, workspaceId, since, until, clientIds, projectIds, tagIds) {
+  app.funcTogglReport = function(workspaceId, since, until, clientIds, projectIds, tagIds) {
     var toggl = this._getToggl(),
         response;
 
-    toggl.setApiToken(apiToken);
-    response = this._getToggl().summary(
+    response = toggl.summary(
       since, until, clientIds, projectIds, tagIds, 
       {workspace_id: workspaceId}
     );
@@ -64,22 +74,22 @@ function ask_server_app_() {
   /**
    * TOGGL_REPORT_DAY
    */
-  app.funcTogglReportDay = function(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
-    return this.funcTogglReport(apiToken, workspaceId, since, since, clientIds, projectIds, tagIds);
+  app.funcTogglReportDay = function(workspaceId, since, clientIds, projectIds, tagIds) {
+    return this.funcTogglReport(workspaceId, since, since, clientIds, projectIds, tagIds);
   };
 
   /**
    * TOGGL_REPORT_WEEK
    */
-  app.funcTogglReportWeek = function(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
-    return this.funcTogglReport(apiToken, workspaceId, since, 'week', clientIds, projectIds, tagIds);
+  app.funcTogglReportWeek = function(workspaceId, since, clientIds, projectIds, tagIds) {
+    return this.funcTogglReport(workspaceId, since, 'week', clientIds, projectIds, tagIds);
   };
 
   /**
    * TOGGL_REPORT_MONTH
    */
-  app.funcTogglReportMonth = function(apiToken, workspaceId, since, clientIds, projectIds, tagIds) {
-    return this.funcTogglReport(apiToken, workspaceId, since, 'month', clientIds, projectIds, tagIds);
+  app.funcTogglReportMonth = function(workspaceId, since, clientIds, projectIds, tagIds) {
+    return this.funcTogglReport(workspaceId, since, 'month', clientIds, projectIds, tagIds);
   };
 
   /**
