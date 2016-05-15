@@ -6,13 +6,12 @@
 function ask_libs_configs_() {
   /**
    * @constructor
-   * 
-   * @param {Object} externalPropertiesContainer Optional container with method getProperty,
-   *                                             for example Google Properties Service
    */
-  var Configs = function(externalPropertiesContainer) {
+  var Configs = function() {
     this._data = {};
-    this._propertiesContainer = externalPropertiesContainer;
+    if (typeof PropertiesService !== 'undefined') {
+      this._propertiesContainer = PropertiesService.getUserProperties();
+    }
 
     var envData = ask_('environments/configs') || {};
 

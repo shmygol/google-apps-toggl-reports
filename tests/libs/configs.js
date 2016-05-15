@@ -21,7 +21,7 @@ suite('libs/configs', function() {
         return {is_debug: true, toggl_token: '1234567890'};
       };
 
-      var configs = new Configs({});
+      var configs = new Configs();
 
       expect(configs._data).to.deep.equal({is_debug: true, toggl_token: '1234567890'});
     });
@@ -115,7 +115,8 @@ suite('libs/configs', function() {
         }
       };
 
-      var configs = new Configs(propertiesMock);
+      var configs = new Configs();
+      configs._propertiesContainer = propertiesMock;
 
       expect(configs.getProperty('missing_key')).to.equal(undefined);
       expect(configs.getProperty('_protected_key')).to.equal('_protected_key in configs');
@@ -139,7 +140,8 @@ suite('libs/configs', function() {
         }
       };
 
-      var configs = new Configs(propertiesMock);
+      var configs = new Configs();
+      configs._propertiesContainer = propertiesMock;
 
       expect(configs.getProperty('property_key')).to.equal(1);
       expect(configs.getProperty('property_key')).to.equal(2);
@@ -189,7 +191,8 @@ suite('libs/configs', function() {
         }
       };
 
-      var configs = new Configs(propertiesMock);
+      var configs = new Configs();
+      configs._propertiesContainer = propertiesMock;
 
       expect(configs.getProperties()).to.deep.equal({
         is_debug: true,
@@ -224,7 +227,8 @@ suite('libs/configs', function() {
         },
       };
 
-      var configs = new Configs(propertiesMock);
+      var configs = new Configs();
+      configs._propertiesContainer = propertiesMock;
 
       expect(configs.getProperties()).to.deep.equal({
         _protected_key: '_protected_key in configs',
@@ -257,7 +261,8 @@ suite('libs/configs', function() {
         },
       };
 
-      var configs = new Configs(propertiesMock);
+      var configs = new Configs();
+      configs._propertiesContainer = propertiesMock;
 
       configs.setProperty('new', 'foo');
     });
@@ -298,7 +303,8 @@ suite('libs/configs', function() {
         },
       };
 
-      var configs = new Configs(propertiesMock);
+      var configs = new Configs();
+      configs._propertiesContainer = propertiesMock;
 
       expect(configs.setProperty.bind(configs, '_protected_new', 'foo')).to.throw(TypeError, 'Cuoln\'t set protected property \'_protected_new\'');
     });
