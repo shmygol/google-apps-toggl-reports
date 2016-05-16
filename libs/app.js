@@ -36,6 +36,13 @@ function ask_libs_app_() {
   };
 
   /**
+   * Get the application's UI object
+   */
+  GasApp.prototype.getUi = function() {
+    return SpreadsheetApp.getUi();
+  };
+
+  /**
    * Register menu callbacks in the scope
    * Pay attention, that the method uses GasApp.prototype._registerMethodInGlobalScope, which must be called during the compiling proccess
    */
@@ -61,7 +68,7 @@ function ask_libs_app_() {
    * Create the app specific spreadsheet menu
    */
   GasApp.prototype.createMenu = function() {
-    var addonMenu = SpreadsheetApp.getUi().createAddonMenu();
+    var addonMenu = this.getUi().createAddonMenu();
     this._menuItems.forEach(function(element, index, array) {
       if (typeof element.globalFunctionName === 'undefined') {
         throw new TypeError(
@@ -75,6 +82,25 @@ function ask_libs_app_() {
     addonMenu.addToUi();
   };
 
+  /**
+   * Show a prompt with the given text and Ok, Cancel buttons.
+   * If Ok button is clicked, text from user will be returned, otherwise undefined.
+   *
+   * @param {String} message The message to display in the dialog box
+   * @return {string|undefined}
+   */
+  GasApp.prototype.simplePrompt = function(message) {
+    var ui = this.getUi(),
+        buttonSet = ui.ButtonSet.OK_CANCEL,
+        okButton = ui.Button.OK;
+
+    var result = ui.prompt(message, buttonSet);
+    if (result.getSelectedButton() == okButton) {
+      return result.getResponseText();
+    } else {
+      return undefined;
+    }
+  };
 
   return GasApp;
 }
