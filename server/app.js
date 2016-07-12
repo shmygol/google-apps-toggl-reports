@@ -28,7 +28,7 @@ function ask_server_app_() {
     if (typeof toggl === 'undefined') {
       var togglApiKey = this.configs.getProperty('toggl_api_key');
       if (!togglApiKey) {
-        throw new Error('Required property toggl_api_key is not set');
+        throw new Error('Toggl.com API key is not set. Please use Add-ons menu to set it.');
       }
       toggl = new Toggl(
         togglApiKey,
@@ -92,10 +92,23 @@ function ask_server_app_() {
     return this.funcTogglReport(workspaceId, since, 'month', clientIds, projectIds, tagIds);
   };
 
+  app.onSetTogglKeyMenuButton = function() {
+    var newApiKey = this.simplePrompt();
+    if (typeof newApiKey !== 'undefined') {
+      this.configs.setProperty('toggl_api_key', newApiKey);
+    }
+  };
+
   /**
    * Set application's properties
    */
   app._menuItems = [
+    {
+      'caption': 'Set Toggl.com API Key',
+      'methodName': 'onSetTogglKeyMenuButton',
+      'globalFunctionName': undefined,
+      'isRegistered': false,
+    },
   ];
   app._toggl = new Toggl();
 
