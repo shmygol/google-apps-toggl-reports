@@ -18,7 +18,7 @@ function ask_libs_toggl_() {
   };
 
   TogglApi.prototype._getApiUrl = function(type, queryParameters) {
-    var baseUrl = 'https://www.toggl.com/reports/api/v2/',
+    var baseUrl = 'https://www.track.toggl.com/reports/api/v2/',
         typePathes = {summary: 'summary.json'},
         queryString = '';
     if (!typePathes.hasOwnProperty(type)) {
